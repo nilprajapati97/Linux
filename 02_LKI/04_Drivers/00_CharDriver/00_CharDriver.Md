@@ -3,6 +3,7 @@ Got it 👍. Let’s go **end-to-end** for a **Character Driver in Linux** – f
 ---
 
 # 🔹 What is a Character Driver?
+======================================================================================================================
 
 A **character driver** allows user-space applications to interact with hardware or kernel functionality **byte-by-byte (character-oriented)** using standard file operations (`open`, `read`, `write`, `ioctl`, `close`).
 Examples: UART driver, I2C/SPI driver, GPIO driver, `/dev/null`.
@@ -10,7 +11,7 @@ Examples: UART driver, I2C/SPI driver, GPIO driver, `/dev/null`.
 ---
 
 # 🔹 Step-by-Step End-to-End Flow
-
+======================================================================================================================
 ## 1. **Driver Registration**
 
 * Every char driver must register itself with the kernel.
@@ -125,11 +126,9 @@ cdev_del(&my_cdev);
 unregister_chrdev_region(dev_num, 1);
 ```
 
----
 
 # 🔹 Full Flow Diagram
-
-```
+======================================================================================================================
 ┌─────────────┐
 │ User App    │   open/read/write/ioctl
 └──────┬──────┘
@@ -159,7 +158,7 @@ unregister_chrdev_region(dev_num, 1);
 ---
 
 # 🔹 How it Works Internally
-
+======================================================================================================================
 1. **App calls `open()`** → VFS checks `/dev/mychardev` → invokes `my_open()`.
 2. **App calls `read()`** → VFS forwards to `my_read()` → driver copies data to user.
 3. **App calls `write()`** → VFS forwards to `my_write()` → driver copies data from user.
@@ -169,7 +168,7 @@ unregister_chrdev_region(dev_num, 1);
 ---
 
 # 🔹 Key Points in Interviews
-
+======================================================================================================================
 * **Major vs Minor number** → Major = driver type, Minor = instance.
 * **copy\_to\_user / copy\_from\_user** → Safe transfer between kernel & user space.
 * **Blocking vs Non-Blocking IO** → Use `wait_queue`, `poll`, `select`.
@@ -179,5 +178,5 @@ unregister_chrdev_region(dev_num, 1);
 ---
 
 👉 This is the **end-to-end char driver lifecycle**.
-
+======================================================================================================================
 Would you like me to also give you a **full working Linux kernel module code (char driver skeleton)** that you can compile and insert with `insmod` to see `/dev/mychardev` working?
