@@ -13,8 +13,8 @@ This guide assumes:
 
 ### 🔧 1. **Hardware Pre-Checks**
 
-| Item                 | Details                                                                |
-| -------------------- | ---------------------------------------------------------------------- |
+| Item                  | Details                                                                |
+| --------------------  | ---------------------------------------------------------------------- |
 | ✅ Power Rails        | Validate VDD\_CPU, VDD\_IO, VDD\_MEM using PMIC.                       |
 | ✅ Clock Sources      | Ensure XO (e.g., 19.2 MHz) crystal feeding SoC, PLLs configured.       |
 | ✅ DDR Initialization | Confirm DDR topology (LPDDR4), timing configuration matches design.    |
