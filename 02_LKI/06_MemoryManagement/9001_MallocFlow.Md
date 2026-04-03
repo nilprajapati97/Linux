@@ -7,7 +7,7 @@ Here’s a **clean, index-wise deep dive into `malloc()`**, tuned for **senior/k
 ```mermaid
 flowchart TD
     %% User Layer
-    A[malloc (size)]  --> B[libc allocator]:::libc
+    A[malloc -> size)]  --> B[libc allocator]:::libc
 
     %% Fast path
     B --> C{tcache hit?}:::decision
