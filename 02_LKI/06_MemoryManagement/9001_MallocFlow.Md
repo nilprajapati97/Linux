@@ -21,8 +21,8 @@ flowchart TD
 
     %% Syscall decision
     E -->|No| G{Large alloc?}:::decision
-    G -->|Yes| H[mmap()]:::syscall
-    G -->|No| I[brk()]:::syscall
+    G -->|Yes| H[mmap call ]:::syscall
+    G -->|No| I[brk sys call]:::syscall
 
     %% Kernel path
     H --> J[sys_mmap]:::kernel
