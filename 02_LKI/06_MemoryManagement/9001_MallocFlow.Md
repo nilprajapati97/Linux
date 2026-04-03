@@ -44,7 +44,7 @@ flowchart TD
     P -->|No| Q[Page fault]:::fault
     Q --> R[handle_mm_fault]:::kernel
     R --> S[alloc_page]:::kernel
-    S --> T[Map page (PTE)]:::kernel
+    S --> T[Map page call PTE]:::kernel
     T --> U[Resume execution]:::user
 
     P -->|Yes| U
