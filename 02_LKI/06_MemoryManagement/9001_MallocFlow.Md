@@ -374,11 +374,480 @@ malloc()
 
 ---
 
-If you want next level (very likely asked in Qualcomm):
+Below is a **Qualcomm-level, kernel-focused system design Q&A set** tailored for a **~9 years experienced kernel/memory developer**. These are the kinds of questions where **depth, trade-offs, and real system thinking** matter more than definitions.
 
-* slab vs slub vs buddy allocator (kernel side)
-* jemalloc vs ptmalloc deep comparison
-* full page table walk (CR3 → PML4 → PTE)
-* tcache internals with exploitation angles
+---
+
+# 🧠 1️⃣ Design a High-Performance Memory Allocator for SoC (Qualcomm)
+
+### ❓ Question
+
+Design a memory allocator for a **multi-core, NUMA-aware mobile SoC** with:
+
+* Low latency
+* Low fragmentation
+* Deterministic behavior
+
+### ✅ Deep Answer
+
+### 🧩 Architecture
+
+* **Per-core arenas (avoid locks)**
+* **Thread-local caches (like tcache)**
+* **Size-class segregation (slab-like)**
+* **Fallback global pool**
+
+---
+
+### 🔹 Allocation Strategy
+
+```id="7s3g8d"
+Small allocs → per-thread cache
+Medium → per-core arena
+Large → mmap (direct kernel)
+```
+
+---
+
+### 🔹 Key Techniques
+
+* **Lock-free fast path**
+* **Batching syscalls (reduce kernel overhead)**
+* **Huge pages (reduce TLB misses)**
+* **NUMA locality-aware allocation**
+
+---
+
+### 🔹 Kernel Integration
+
+* Use:
+
+  * `alloc_pages_node()`
+  * `mmap(MAP_POPULATE)`
+* Track:
+
+  * `vm_area_struct`
+  * NUMA node affinity
+
+---
+
+### 🔹 Trade-offs
+
+| Goal              | Trade-off          |
+| ----------------- | ------------------ |
+| Low latency       | More memory usage  |
+| Low fragmentation | Complex management |
+| Determinism       | Less flexibility   |
+
+---
+
+# 🧠 2️⃣ How would you debug a memory leak in production kernel?
+
+### ❓ Question
+
+Production system running out of memory slowly.
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Step 1: Identify leak type
+
+* User-space leak
+* Kernel leak (kmalloc, slab)
+
+---
+
+### 🔹 Step 2: Tools
+
+* `/proc/meminfo`
+* `/proc/slabinfo`
+* `kmemleak`
+* `perf`
+* `ftrace`
+
+---
+
+### 🔹 Step 3: Kernel-level analysis
+
+* Track:
+
+  * slab growth
+  * unreleased references
+* Use:
+
+  * `kmemleak_scan()`
+
+---
+
+### 🔹 Step 4: Root causes
+
+* Reference counting bugs
+* Missing `kfree()`
+* Circular references
+
+---
+
+### 🔹 Step 5: Fix
+
+* Add proper lifecycle management
+* Use RAII patterns (if possible)
+* Validate with stress tests
+
+---
+
+# 🧠 3️⃣ Design a Memory Pool for Real-Time Systems
+
+### ❓ Question
+
+Design a deterministic allocator for **real-time audio/modem stack**
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Constraints
+
+* No fragmentation
+* Bounded latency
+* No page faults
+
+---
+
+### 🔹 Design
+
+* Pre-allocated memory pool
+* Fixed-size blocks
+
+```id="7k5r9l"
+Pool → [block1][block2][block3]...
+Free list → O(1) allocation
+```
+
+---
+
+### 🔹 Allocation
+
+* Pop from free list
+* No system calls
+
+---
+
+### 🔹 Deallocation
+
+* Push back to free list
+
+---
+
+### 🔹 Advantages
+
+* Deterministic
+* No fragmentation
+* Zero kernel involvement
+
+---
+
+# 🧠 4️⃣ How does Linux handle memory pressure?
+
+### ❓ Question
+
+What happens under memory pressure?
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Steps
+
+1. **Page reclaim**
+2. **Swap (if enabled)**
+3. **Slab shrinkers**
+4. **OOM killer**
+
+---
+
+### 🔹 Key Kernel Components
+
+* LRU lists
+* `kswapd`
+* `try_to_free_pages()`
+
+---
+
+### 🔹 Behavior
+
+* Reclaim:
+
+  * anonymous pages
+  * file-backed pages
+* Prioritize:
+
+  * inactive pages
+
+---
+
+### 🔹 Qualcomm relevance
+
+* Embedded systems often disable swap
+* Must tune:
+
+  * OOM thresholds
+  * memory cgroups
+
+---
+
+# 🧠 5️⃣ Design a NUMA-aware allocator
+
+### ❓ Question
+
+Design allocator for multi-node memory system.
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Problem
+
+* Remote memory access is slow
+
+---
+
+### 🔹 Solution
+
+* Per-NUMA-node allocator
+
+```id="u7d3kd"
+Node 0 → local memory pool
+Node 1 → local memory pool
+```
+
+---
+
+### 🔹 Allocation Strategy
+
+* Prefer local node
+* Fallback to remote
+
+---
+
+### 🔹 Kernel APIs
+
+* `alloc_pages_node()`
+* `set_mempolicy()`
+
+---
+
+### 🔹 Optimization
+
+* Thread pinning
+* Memory affinity
+
+---
+
+# 🧠 6️⃣ Design a zero-copy data pipeline
+
+### ❓ Question
+
+Design zero-copy between processes
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Techniques
+
+* `mmap`
+* `sendfile()`
+* `splice()`
+* shared memory (`shmget`)
+
+---
+
+### 🔹 Flow
+
+```id="2k9s8p"
+Producer → writes to shared memory
+Consumer → reads directly
+(no copy, no syscall overhead)
+```
+
+---
+
+### 🔹 Kernel Role
+
+* Shared page tables
+* Copy-on-write (COW)
+
+---
+
+### 🔹 Trade-offs
+
+* Synchronization complexity
+* Cache coherency issues
+
+---
+
+# 🧠 7️⃣ How would you optimize malloc for cache locality?
+
+### ❓ Question
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Problems
+
+* Cache misses
+* False sharing
+* Poor locality
+
+---
+
+### 🔹 Solutions
+
+* Cache-line alignment
+* Per-thread arenas
+* Object pools
+
+---
+
+### 🔹 Techniques
+
+* Keep related objects together
+* Avoid inter-thread sharing
+* Use `__cacheline_aligned`
+
+---
+
+# 🧠 8️⃣ Debugging page faults in production
+
+### ❓ Question
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Tools
+
+* `perf`
+* `ftrace`
+* `/proc/vmstat`
+
+---
+
+### 🔹 Root causes
+
+* First touch allocation
+* Copy-on-write
+* Missing prefetch
+
+---
+
+### 🔹 Fixes
+
+* Prefault memory
+* Use THP
+* Optimize access patterns
+
+---
+
+# 🧠 9️⃣ Design memory subsystem for a mobile SoC (Qualcomm level)
+
+### ❓ Question
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Components
+
+* MMU
+* IOMMU
+* Cache hierarchy
+* DRAM controller
+
+---
+
+### 🔹 Goals
+
+* Power efficiency
+* Predictability
+* Low latency
+
+---
+
+### 🔹 Features
+
+* Memory compression
+* zRAM
+* Dynamic voltage scaling
+
+---
+
+### 🔹 Kernel involvement
+
+* Page tables
+* Memory reclaim
+* Cgroup limits
+
+---
+
+# 🧠 🔟 How does malloc interact with kernel security (important for Qualcomm)
+
+### ❓ Question
+
+---
+
+### ✅ Deep Answer
+
+### 🔹 Mechanisms
+
+* ASLR
+* Guard pages
+* NX bit
+* Heap hardening
+
+---
+
+### 🔹 Vulnerabilities
+
+* Use-after-free
+* Heap overflow
+* Double free
+
+---
+
+### 🔹 Mitigations
+
+* Canary values
+* Safe unlinking
+* Randomization
+
+---
+
+# 🧠 Final Interview-Level Insight
+
+For a **9-year kernel engineer**, interviewers expect:
+
+* Not just *what* malloc does
+* But:
+
+  * **why design choices exist**
+  * **trade-offs at scale**
+  * **kernel + hardware interactions**
+  * **performance + memory + power balance**
+
+---
+
+# 🚀 If you want next level
+
+I can go deeper into:
+
+* malloc internals (glibc ptmalloc source-level)
+* slab/slub allocator (kernel)
+* page table walk (x86_64 / ARM64)
+* TLB shootdowns & SMP
+* jemalloc vs tcmalloc vs ptmalloc
+* reverse engineering heap exploitation (very common in interviews)
 
 Just tell me 👍
