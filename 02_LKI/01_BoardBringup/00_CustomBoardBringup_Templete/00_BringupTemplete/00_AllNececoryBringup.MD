@@ -257,3 +257,276 @@ If you want immediate deliverables, I can **generate the minimal working file te
 * `myboard.dts` minimal chosen + memory + serial node,
 
 All annotated with exact places you must edit (UART base, timer, DDR timings). Say “Generate templates” and I’ll produce them right away.
+
+
+Below are **minimal, working skeletons** you can drop into a U-Boot-style tree (or adapt for standalone bare-metal). I’ve **annotated every place you must edit** for your SoC/board.
+
+---
+
+# 1️⃣ `hello_uart.c` — bare-metal SRAM test
+
+```c
+/* hello_uart.c — minimal UART poll TX test
+ *
+ * Build (example for ARMv7-A, adjust toolchain/flags):
+ *   arm-none-eabi-gcc -nostdlib -nostartfiles -T linker.ld -o hello.elf hello_uart.c
+ *   arm-none-eabi-objcopy -O binary hello.elf hello.bin
+ *
+ * Load to SRAM via JTAG/UART downloader and jump to _start.
+ */
+
+/* ===== EDIT THESE ===== */
+#define UART0_BASE   0x01C28000  // <-- CHANGE: your UART base from TRM
+#define UART_CLK_HZ  24000000    // <-- CHANGE: input clock to UART
+#define BAUDRATE     115200      // <-- CHANGE if needed
+
+/* 16550-compatible offsets (verify for your SoC!) */
+#define UART_THR   (UART0_BASE + 0x00) /* write */
+#define UART_RBR   (UART0_BASE + 0x00) /* read  */
+#define UART_DLL   (UART0_BASE + 0x00)
+#define UART_DLM   (UART0_BASE + 0x04)
+#define UART_LCR   (UART0_BASE + 0x0C)
+#define UART_LSR   (UART0_BASE + 0x14)
+#define UART_FCR   (UART0_BASE + 0x08)
+
+#define UART_LSR_THRE (1 << 5)
+
+static inline void writel(unsigned int v, unsigned int addr) {
+    *(volatile unsigned int *)addr = v;
+}
+static inline unsigned int readl(unsigned int addr) {
+    return *(volatile unsigned int *)addr;
+}
+
+/* Optional: minimal init if BootROM/SPL didn’t do it */
+static void uart_init(void) {
+    /* ===== EDIT if your UART differs =====
+     * Assume 16550: set divisor, 8N1, enable FIFO
+     */
+    unsigned int divisor = UART_CLK_HZ / (16 * BAUDRATE);
+
+    /* Enable access to DLL/DLM */
+    writel(0x80, UART_LCR);
+    writel(divisor & 0xFF, UART_DLL);
+    writel((divisor >> 8) & 0xFF, UART_DLM);
+
+    /* 8 data bits, no parity, 1 stop */
+    writel(0x03, UART_LCR);
+
+    /* Enable FIFO, clear RX/TX */
+    writel(0x07, UART_FCR);
+}
+
+static inline void putc(char c) {
+    while (!(readl(UART_LSR) & UART_LSR_THRE)) {}
+    writel((unsigned int)c, UART_THR);
+}
+
+static void puts(const char *s) {
+    while (*s) {
+        if (*s == '\n') putc('\r');
+        putc(*s++);
+    }
+}
+
+/* Simple entry; your linker should set reset vector to _start */
+void _start(void) {
+    /* If clocks/pinmux aren’t already set, you MUST do it here:
+     * ===== EDIT: enable UART clock + pinmux =====
+     */
+
+    uart_init(); /* comment out if already initialized */
+
+    puts("Hello from SRAM!\n");
+
+    for (;;) {}
+}
+```
+
+> ⚠️ If you see nothing: check **clock enable + pinmux** first, then base address.
+
+---
+
+# 2️⃣ `board/myvendor/myboard/spl.c` — SPL skeleton
+
+```c
+/* SPL early init skeleton */
+
+#include <common.h>
+#include <spl.h>
+
+/* ===== EDIT: include SoC headers for clocks, pinmux, DDR ===== */
+
+void spl_board_init(void)
+{
+    /* Called after basic SPL init */
+
+    /* 1) Enable clocks needed for UART, MMC, DDR */
+    // clock_init();  // <-- IMPLEMENT
+
+    /* 2) Setup pinmux for UART (for early prints) */
+    // pinmux_init_uart(); // <-- IMPLEMENT
+
+    /* 3) Init UART for debug (optional if early console is enabled) */
+    // preloader_console_init();
+
+    /* 4) Init DRAM (critical) */
+    // dram_init(); // <-- IMPLEMENT (DDR timings!)
+
+    /* 5) Init boot device (eMMC/SD/SPI) */
+    // mmc_initialize(NULL); // or spi/nand init
+}
+
+/* If your platform needs custom boot device selection */
+u32 spl_boot_device(void)
+{
+    /* ===== EDIT: return correct boot device enum ===== */
+    // return BOOT_DEVICE_MMC1;
+    return BOOT_DEVICE_NONE;
+}
+```
+
+---
+
+# 3️⃣ `board/myvendor/myboard/board.c` — main U-Boot board file
+
+```c
+#include <common.h>
+#include <init.h>
+
+/* ===== EDIT: include SoC-specific headers ===== */
+
+int board_init(void)
+{
+    /* Set boot params address if needed */
+    // gd->bd->bi_boot_params = CONFIG_SYS_SDRAM_BASE + 0x100;
+
+    /* Init peripherals if not done earlier */
+    // pinmux_init_all();
+    // clock_init_peripherals();
+
+    return 0;
+}
+
+int dram_init(void)
+{
+    /* U-Boot DRAM size detection or fixed size */
+    /* ===== EDIT: set your RAM size ===== */
+    gd->ram_size = 512 * 1024 * 1024ULL; // e.g., 512MB
+    return 0;
+}
+
+int board_late_init(void)
+{
+    /* Optional: environment setup */
+    // env_set("bootcmd", "run distro_bootcmd");
+    return 0;
+}
+```
+
+---
+
+# 4️⃣ `configs/myboard_defconfig` — minimal
+
+```config
+CONFIG_ARM=y                      # or ARCH for your CPU
+CONFIG_TARGET_MYBOARD=y
+
+CONFIG_SPL=y
+CONFIG_SPL_TEXT_BASE=0x00000000   # <-- EDIT: SRAM address for SPL
+CONFIG_SPL_MAX_SIZE=0x00020000    # <-- EDIT
+
+CONFIG_DEFAULT_DEVICE_TREE="myboard"
+
+CONFIG_DEBUG_UART=y
+CONFIG_DEBUG_UART_BASE=0x01C28000   # <-- EDIT UART base
+CONFIG_DEBUG_UART_CLOCK=24000000    # <-- EDIT clock
+CONFIG_DEBUG_UART_ANNOUNCE=y
+
+CONFIG_BAUDRATE=115200
+
+CONFIG_DM=y
+CONFIG_OF_CONTROL=y
+
+CONFIG_MMC=y
+CONFIG_MMC_SDHCI=y                # or your controller
+
+CONFIG_SERIAL=y
+CONFIG_SYS_NS16550=y              # if 16550-compatible
+```
+
+---
+
+# 5️⃣ `arch/arm/dts/myboard.dts` — minimal device tree
+
+```dts
+/dts-v1/;
+
+/ {
+    model = "MyVendor MyBoard";
+    compatible = "myvendor,myboard";
+
+    #address-cells = <1>;
+    #size-cells = <1>;
+
+    chosen {
+        stdout-path = &uart0;   // <-- ensures console output
+    };
+
+    memory@40000000 {
+        device_type = "memory";
+        reg = <0x40000000 0x20000000>; // <-- EDIT: base + size (e.g., 512MB)
+    };
+
+    uart0: serial@01c28000 {
+        compatible = "ns16550a";  // <-- EDIT if different
+        reg = <0x01c28000 0x400>; // <-- EDIT base/size
+        clock-frequency = <24000000>; // <-- EDIT
+        current-speed = <115200>;
+        status = "okay";
+    };
+};
+```
+
+---
+
+# 🧭 What You MUST Customize (Checklist)
+
+### 🔴 Critical (won’t boot without this)
+
+* UART base address
+* UART clock
+* Pinmux setup
+* DRAM init (DDR timings!)
+* SPL load address
+
+---
+
+### 🟡 Board-specific
+
+* Boot device (eMMC / SD / SPI)
+* Device tree memory size
+* Peripheral enables
+
+---
+
+### 🟢 Nice-to-have
+
+* Debug UART
+* Environment variables
+* Extra drivers
+
+---
+
+# 🚀 Suggested Bring-up Order
+
+1. ✅ Run `hello_uart.c` from SRAM → confirm UART works
+2. ✅ Add clock + pinmux → stable output
+3. ✅ Bring up SPL → print early logs
+4. ✅ Add DDR init → verify memory
+5. ✅ Load full U-Boot
+6. ✅ Boot kernel via DTS
+
+---
+
+If you tell me your exact SoC (e.g., Allwinner, TI AM62x, NXP i.MX6), I can **replace all placeholders with real register values and working init code** so you can boot much faster.
