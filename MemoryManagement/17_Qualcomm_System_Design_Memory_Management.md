@@ -68,7 +68,7 @@ sequenceDiagram
     participant GPU as 🟦 Adreno GPU
     participant SMMU as 🟧 SMMU
     participant TLB as 🟧 SMMU TLB
-    participant PT as 🟧 SMMU Page Table<br/>(in DDR)
+    participant PT as 🟧 SMMU Page Table<br/>[in DDR]
     participant DDR as 🟩 DDR Memory
 
     GPU->>SMMU: DMA Read IOVA=0xA000_0000, SID=0x1800
@@ -159,10 +159,10 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant APP as 🟦 Camera App
-    participant CAM_DRV as 🟩 Camera Driver (CamSS)
+    participant CAM_DRV as 🟩 Camera Driver [CamSS]
     participant DMA_BUF as 🟩 DMA-BUF Framework
     participant GPU_DRV as 🟧 Adreno GPU Driver
-    participant DISP_DRV as 🟧 Display Driver (MDSS)
+    participant DISP_DRV as 🟧 Display Driver [MDSS]
     participant SMMU as 🟥 SMMU
 
     APP->>DMA_BUF: ioctl(dma_heap_fd, DMA_HEAP_ALLOC,<br/>{size=8MB, flags=0})
@@ -253,7 +253,7 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant APP as 🟦 User-Space (GL/VK)
+    participant APP as 🟦 User-Space [GL/VK]
     participant DRV as 🟩 DRM MSM / KGSL
     participant SMMU as 🟧 SMMU
     participant CP as 🟥 Command Processor
@@ -338,7 +338,7 @@ sequenceDiagram
     participant APP as 🟦 Media Player
     participant VID_DRV as 🟩 Venus Video Driver
     participant DMA_HEAP as 🟩 DMA-BUF Secure Heap
-    participant SCM as 🟧 SCM (Secure Channel)
+    participant SCM as 🟧 SCM [Secure Channel]
     participant TZ as 🟧 TrustZone
     participant XPU as 🟥 XPU Hardware
 
@@ -514,7 +514,7 @@ sequenceDiagram
     participant CMA as 🟧 CMA Allocator
     participant MIGRATE as 🟧 Page Migration
     participant COMPACT as 🟧 Compaction
-    participant RECLAIM as 🟧 Reclaim (kswapd)
+    participant RECLAIM as 🟧 Reclaim [kswapd]
 
     DRV->>CMA: cma_alloc(camera_cma, 8192_pages, align)
     CMA->>CMA: Find free range in bitmap
@@ -695,7 +695,7 @@ flowchart TB
 sequenceDiagram
     participant CAM_DRV as 🟦 Camera Driver
     participant ICC as 🟩 Interconnect Framework
-    participant RPMh as 🟧 RPMh (Resource PM)
+    participant RPMh as 🟧 RPMh [Resource PM]
     participant NoC as 🟥 NoC Hardware
     participant DDR as 🟥 DDR Controller
 
@@ -780,7 +780,7 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant VM1 as 🟩 Primary VM (Linux)
+    participant VM1 as 🟩 Primary VM [Linux]
     participant HV as 🟧 Gunyah Hypervisor
     participant VM2 as 🟦 Secondary VM
 

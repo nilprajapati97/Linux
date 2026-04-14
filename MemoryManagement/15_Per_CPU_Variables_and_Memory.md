@@ -555,10 +555,10 @@ flowchart TB
     end
 
     subgraph Memory["🟩 Per-CPU Memory Layout"]
-        CPU0["CPU 0 area\n|counter=5|stats|...|"]
-        CPU1["CPU 1 area\n|counter=3|stats|...|"]
-        CPU2["CPU 2 area\n|counter=7|stats|...|"]
-        CPU3["CPU 3 area\n|counter=2|stats|...|"]
+        CPU0["CPU 0 area\n/counter=5/stats/.../"]
+        CPU1["CPU 1 area\n/counter=3/stats/.../"]
+        CPU2["CPU 2 area\n/counter=7/stats/.../"]
+        CPU3["CPU 3 area\n/counter=2/stats/.../"]
     end
 
     subgraph Sum["🟧 Reading Total"]
@@ -585,7 +585,7 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant SLAB as 🟦 SLUB (needs page)
+    participant SLAB as 🟦 SLUB [needs page]
     participant PCP as 🟧 Per-CPU Page List
     participant BUDDY as 🟩 Buddy Allocator
     participant ZONE as 🟩 Zone free_area

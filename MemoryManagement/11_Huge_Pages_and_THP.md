@@ -450,7 +450,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant PROC as 🟦 Process
-    participant KHUGE as 🟧 khugepaged (kthread)
+    participant KHUGE as 🟧 khugepaged [kthread]
     participant MM as 🟩 Linux MM
     participant TLB as 🟥 CPU TLB
 

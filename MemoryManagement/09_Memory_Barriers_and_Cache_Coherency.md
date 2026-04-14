@@ -564,9 +564,9 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant CPU0 as 🟦 CPU 0 (Producer)
+    participant CPU0 as 🟦 CPU 0 [Producer]
     participant MEM as 🟧 Shared Memory
-    participant CPU1 as 🟩 CPU 1 (Consumer)
+    participant CPU1 as 🟩 CPU 1 [Consumer]
 
     Note over CPU0: Write data to buffer
     CPU0->>MEM: data[0] = payload_a

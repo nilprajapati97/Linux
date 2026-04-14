@@ -628,10 +628,10 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant DRV as 🟦 Device Driver
-    participant IOREMAP as 🟧 ioremap (arch/mm)
+    participant IOREMAP as 🟧 ioremap [arch/mm]
     participant VMALLOC as 🟧 vmalloc VA space
     participant PT as 🟩 Kernel Page Tables
-    participant DEV as 🟥 Device (MMIO)
+    participant DEV as 🟥 Device [MMIO]
 
     DRV->>DRV: bar_phys = pci_resource_start(pdev, 0)
     DRV->>IOREMAP: regs = ioremap(bar_phys, bar_len)

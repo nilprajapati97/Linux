@@ -390,7 +390,7 @@ flowchart TB
         KM1["kmalloc(16384, GFP_KERNEL)"]
         KM2["SLUB → alloc_pages(order=2)"]
         KM3["4 CONTIGUOUS pages\nin direct mapping"]
-        KM4["Physical:\n|P100|P101|P102|P103|"]
+        KM4["Physical:\n/P100/P101/P102/P103/"]
         KM5["Virtual = PAGE_OFFSET + phys\n(linear mapping, no new PTEs)"]
         KM1 --> KM2 --> KM3 --> KM4 --> KM5
     end
@@ -399,7 +399,7 @@ flowchart TB
         VM1["vmalloc(16384)"]
         VM2["alloc_page() × 4\n(individual pages)"]
         VM3["4 NON-CONTIGUOUS pages"]
-        VM4["Physical:\n|P200| |P507| |P42| |P999|"]
+        VM4["Physical:\n/P200/ /P507/ /P42/ /P999/"]
         VM5["Virtual = vmalloc VA range\n(new PTEs map scattered pages)"]
         VM1 --> VM2 --> VM3 --> VM4 --> VM5
     end
@@ -413,7 +413,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant CALLER as 🟦 Caller
-    participant KV as 🟧 kvmalloc()
+    participant KV as 🟧 kvmalloc[]
     participant KM as 🟩 kmalloc
     participant VM as 🟩 vmalloc
 

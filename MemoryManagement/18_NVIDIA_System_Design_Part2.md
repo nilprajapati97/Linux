@@ -51,7 +51,7 @@ sequenceDiagram
     participant RT_PM as 🟦 Runtime PM
     participant DRV as 🟩 GPU Kernel Driver
     participant CE as 🟧 Copy Engine
-    participant VRAM as 🟥 GPU VRAM (16GB)
+    participant VRAM as 🟥 GPU VRAM [16GB]
     participant RAM as 🟩 System RAM
 
     Note over RT_PM: GPU idle for 5 seconds<br/>→ trigger runtime suspend
@@ -154,11 +154,11 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant COMP as 🟦 Compositor (Xorg/Wayland)
+    participant COMP as 🟦 Compositor [Xorg/Wayland]
     participant DRM as 🟩 DRM Core
     participant NV_DRV as 🟧 NVIDIA KMS Driver
     participant TTM as 🟧 TTM
-    participant CRTC as 🟥 Display Hardware (CRTC)
+    participant CRTC as 🟥 Display Hardware [CRTC]
 
     Note over COMP: Frame N rendering complete
 
@@ -408,10 +408,10 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant KMD as 🟩 Kernel Driver (CPU)
-    participant CMD as 🟦 Command Queue (VRAM)
-    participant GSP as 🟧 GSP-RM (RISC-V)
-    participant RSP as 🟦 Response Queue (VRAM)
+    participant KMD as 🟩 Kernel Driver [CPU]
+    participant CMD as 🟦 Command Queue [VRAM]
+    participant GSP as 🟧 GSP-RM [RISC-V]
+    participant RSP as 🟦 Response Queue [VRAM]
     participant GPU_HW as 🟥 GPU Engines
 
     Note over KMD: Want to allocate GPU memory
@@ -686,7 +686,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant CPU as 🟦 CPU
-    participant CPU_CACHE as 🟧 CPU Cache (L1/L2/LLC)
+    participant CPU_CACHE as 🟧 CPU Cache [L1/L2/LLC]
     participant PCIE as 🟧 PCIe Bus
     participant GPU_L2 as 🟧 GPU L2 Cache
     participant VRAM as 🟥 VRAM
@@ -773,7 +773,7 @@ sequenceDiagram
     participant MC as 🟧 GPU Memory Controller
     participant ECC as 🟧 ECC Engine
     participant DRV as 🟩 Kernel Driver
-    participant INFOROM as 🟩 InfoROM (persistent)
+    participant INFOROM as 🟩 InfoROM [persistent]
     participant ADMIN as 🟦 nvidia-smi
 
     HBM->>MC: Memory read returns with error

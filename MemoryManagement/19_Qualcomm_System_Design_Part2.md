@@ -56,7 +56,7 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant MSS as 🟩 Modem (Q6)
+    participant MSS as 🟩 Modem [Q6]
     participant WDOG as 🟧 Modem Watchdog
     participant PIL as 🟦 PIL / Remoteproc
     participant TZ as 🟥 TrustZone
@@ -145,8 +145,8 @@ sequenceDiagram
     participant APP as 🟦 Music App
     participant ALSA as 🟧 ALSA PCM Driver
     participant ION as 🟧 DMA-BUF Heap
-    participant ADSP as 🟩 ADSP (Hexagon)
-    participant CODEC as 🟥 Audio Codec (WCD938x)
+    participant ADSP as 🟩 ADSP [Hexagon]
+    participant CODEC as 🟥 Audio Codec [WCD938x]
 
     APP->>ALSA: snd_pcm_open() + hw_params<br/>(48kHz, 16-bit, 2ch)
 
@@ -326,7 +326,7 @@ sequenceDiagram
     participant PANIC as 🟥 Panic Handler
     participant MINI_DRV as 🟧 Minidump Driver
     participant SMEM as 🟧 SMEM
-    participant IMEM as 🟧 IMEM (always-on)
+    participant IMEM as 🟧 IMEM [always-on]
     participant WDT as 🟥 Watchdog
     participant SBL as 🟩 XBL Bootloader
 
@@ -419,7 +419,7 @@ flowchart LR
 
 ```mermaid
 sequenceDiagram
-    participant PBL as 🟥 PBL (ROM)
+    participant PBL as 🟥 PBL [ROM]
     participant XBL as 🟧 XBL
     participant TZ as 🟥 TrustZone
     participant HYP as 🟧 Hypervisor
@@ -509,7 +509,7 @@ sequenceDiagram
     participant NAPI as 🟦 NAPI Poll
     participant DRV as 🟧 ath11k Driver
     participant DMA_API as 🟩 DMA API
-    participant RXDMA as 🟥 RXDMA Ring (HW)
+    participant RXDMA as 🟥 RXDMA Ring [HW]
     participant WIFI_HW as 🟥 WiFi Hardware
 
     Note over DRV: Init: pre-fill RX ring
@@ -595,12 +595,12 @@ flowchart TB
 
 ```mermaid
 sequenceDiagram
-    participant CPU as 🟦 CPU (all cores)
+    participant CPU as 🟦 CPU [all cores]
     participant LPMH as 🟧 cpuidle / LPM driver
     participant RSC as 🟧 RSC
-    participant AOP as 🟩 AOP (Always-On)
+    participant AOP as 🟩 AOP [Always-On]
     participant DDR_CTRL as 🟥 DDR Controller
-    participant DDR as 🟥 DDR (DRAM)
+    participant DDR as 🟥 DDR [DRAM]
 
     Note over CPU: All CPUs idle → deep sleep
 
@@ -687,9 +687,9 @@ flowchart TB
 sequenceDiagram
     participant TSENS as 🟥 Temperature Sensor
     participant THERM as 🟦 Thermal Framework
-    participant DEVFREQ as 🟧 devfreq (DDR governor)
-    participant ICC as 🟧 Interconnect (ICC)
-    participant DDR_CTRL as 🟩 DDR Controller (MC)
+    participant DEVFREQ as 🟧 devfreq [DDR governor]
+    participant ICC as 🟧 Interconnect [ICC]
+    participant DDR_CTRL as 🟩 DDR Controller [MC]
     participant APP as 🟦 Application
 
     TSENS->>THERM: Temperature: 85°C<br/>(trip point 1: throttle)
@@ -773,7 +773,7 @@ flowchart TB
 sequenceDiagram
     participant CLASS as 🟦 Mass Storage Driver
     participant DWC3 as 🟧 DWC3 Driver
-    participant TRB as 🟧 TRB Ring (DMA coherent)
+    participant TRB as 🟧 TRB Ring [DMA coherent]
     participant SMMU as 🟩 USB SMMU
     participant DWC3_HW as 🟥 DWC3 Hardware
 
@@ -850,8 +850,8 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant APP as 🟦 Camera App / GStreamer
-    participant V4L2_CAP as 🟧 V4L2 Capture (VFE)
-    participant V4L2_ENC as 🟧 V4L2 Encoder (Venus)
+    participant V4L2_CAP as 🟧 V4L2 Capture [VFE]
+    participant V4L2_ENC as 🟧 V4L2 Encoder [Venus]
     participant HEAP as 🟩 DMA-BUF Heap
     participant CAM_SMMU as 🟥 Camera SMMU
     participant VID_SMMU as 🟥 Video SMMU

@@ -167,7 +167,7 @@ sequenceDiagram
     participant PCI as 🟦 PCIe Subsystem
     participant DRV as 🟩 GPU Kernel Driver
     participant MM as 🟩 Linux MM
-    participant USER as 🟧 User-space (CUDA)
+    participant USER as 🟧 User-space [CUDA]
 
     Note over PCI: BIOS/Firmware assigns<br/>BAR physical addresses
 
@@ -280,7 +280,7 @@ sequenceDiagram
     participant DRM as 🟩 DRM Core
     participant TTM as 🟧 TTM
     participant VRAM as 🟥 GPU VRAM
-    participant GTT as 🟥 System RAM (GTT)
+    participant GTT as 🟥 System RAM [GTT]
 
     App->>DRM: ioctl(GEM_CREATE, size=64MB)
     DRM->>TTM: ttm_bo_init(placement=VRAM|GTT)
@@ -431,10 +431,10 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant APP as 🟦 User Application
-    participant NIC_DRV as 🟩 Network Driver (mlx5)
+    participant NIC_DRV as 🟩 Network Driver [mlx5]
     participant NV_DRV as 🟧 NVIDIA Driver
     participant GPU as 🟥 GPU VRAM
-    participant NIC as 🟥 RDMA NIC (HCA)
+    participant NIC as 🟥 RDMA NIC [HCA]
     participant IOMMU as 🟩 IOMMU
 
     APP->>NIC_DRV: ibv_reg_mr(gpu_va, size, GPU)
@@ -740,7 +740,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant DRV as 🟩 GPU Kernel Driver
-    participant PT_MEM as 🟩 Page Table Memory<br/>(in VRAM or System RAM)
+    participant PT_MEM as 🟩 Page Table Memory<br/>[in VRAM or System RAM]
     participant CE as 🟥 Copy Engine
     participant GPU_MMU as 🟥 GPU MMU
     participant SM as 🟥 GPU Shader Cores

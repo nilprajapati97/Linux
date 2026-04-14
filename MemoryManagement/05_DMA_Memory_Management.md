@@ -660,9 +660,9 @@ flowchart TB
 sequenceDiagram
     participant DRV as 🟦 Device Driver
     participant DMA_API as 🟧 DMA API
-    participant IOMMU as 🟧 IOMMU (if present)
+    participant IOMMU as 🟧 IOMMU [if present]
     participant CACHE as 🟩 CPU Cache
-    participant DEV as 🟥 Device (DMA engine)
+    participant DEV as 🟥 Device [DMA engine]
 
     Note over DRV: Prepare data for device
     DRV->>DRV: Fill buffer with data

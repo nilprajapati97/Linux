@@ -519,7 +519,7 @@ flowchart TB
 ```mermaid
 sequenceDiagram
     participant PARENT as 🟦 Parent Process
-    participant FORK as 🟧 Kernel (copy_mm)
+    participant FORK as 🟧 Kernel [copy_mm]
     participant CHILD as 🟩 Child Process
     participant PT as 🟥 Page Tables
 
