@@ -1,46 +1,47 @@
-# ARMv8 Architecture — Interview Questions & Answers
+<div align="center">
 
-## For 15+ Years Experienced Professionals
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-This directory contains **deep, expert-level** questions and answers covering every ARMv8 subsystem. Each answer is explained **from scratch** — building up from fundamentals to advanced details, as expected in senior architect/principal engineer interviews.
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">❓ Question Answers</h1>
 
----
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">ARMv8 interview questions and answers</p>
 
-## Question Banks by Subsystem
+</div>
 
-| # | Topic | File | Questions |
-|---|-------|------|-----------|
-| 1 | [General Architecture](./01_General_Architecture_QA.md) | ARMv8 fundamentals, profiles, execution states, exception levels | 20 |
-| 2 | [CPU Subsystem](./02_CPU_Subsystem_QA.md) | Pipeline, registers, instruction set, branch prediction, OoO | 20 |
-| 3 | [Memory Subsystem](./03_Memory_Subsystem_QA.md) | MMU, page tables, TLB, memory model, ordering, barriers | 20 |
-| 4 | [Cache Subsystem](./04_Cache_Subsystem_QA.md) | Cache hierarchy, coherency, MESI/MOESI, maintenance, PoC/PoU | 20 |
-| 5 | [Interrupt Subsystem](./05_Interrupt_Subsystem_QA.md) | GIC, SGI/PPI/SPI/LPI, exception handling, ITS, priority | 20 |
-| 6 | [Security Subsystem](./06_Security_Subsystem_QA.md) | TrustZone, Secure Boot, PAC, MTE, RME, crypto extensions | 20 |
-| 7 | [Virtualization](./07_Virtualization_QA.md) | EL2, Stage-2, VHE, SMMU, nested virt, live migration | 20 |
-| 8 | [Debug & Trace](./08_Debug_Trace_QA.md) | Breakpoints, watchpoints, PMU, ETM, CoreSight, SPE | 20 |
-| 9 | [Interconnect & Bus](./09_Interconnect_QA.md) | AMBA, AXI, ACE, CHI, mesh topology, snoop filter | 20 |
-| 10 | [Power Management](./10_Power_Management_QA.md) | PSCI, DVFS, WFI/WFE, idle states, power domains | 15 |
-| 11 | [SIMD & Floating Point](./11_SIMD_FP_QA.md) | NEON, SVE/SVE2, SME, FP16/BF16, ML extensions | 15 |
+</div>
 
-**Total: ~210 Questions**
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs / Question_Answers`
+
+![Category](https://img.shields.io/badge/Category-Q&A-9370DB?style=flat-square) ![Docs](https://img.shields.io/badge/Docs-11-2E8B57?style=flat-square)
 
 ---
 
-## How to Use
+<h2 style="color: #9370DB;">📄 Files</h2>
 
-- **Interview Prep**: Read the question first, try to answer, then check.
-- **Self-Assessment**: Cover the answer and score yourself.
-- **Knowledge Gaps**: If an answer surprises you, refer to the corresponding subsystem docs in `../` for deeper context.
+| | File | Type |
+|:---:|:---|:---|
+| 📄 | [01_General_Architecture_QA.md](01_General_Architecture_QA.md) | Markdown |
+| 📄 | [02_CPU_Subsystem_QA.md](02_CPU_Subsystem_QA.md) | Markdown |
+| 📄 | [03_Memory_Subsystem_QA.md](03_Memory_Subsystem_QA.md) | Markdown |
+| 📄 | [04_Cache_Subsystem_QA.md](04_Cache_Subsystem_QA.md) | Markdown |
+| 📄 | [05_Interrupt_Subsystem_QA.md](05_Interrupt_Subsystem_QA.md) | Markdown |
+| 📄 | [06_Security_Subsystem_QA.md](06_Security_Subsystem_QA.md) | Markdown |
+| 📄 | [07_Virtualization_QA.md](07_Virtualization_QA.md) | Markdown |
+| 📄 | [08_Debug_Trace_QA.md](08_Debug_Trace_QA.md) | Markdown |
+| 📄 | [09_Interconnect_QA.md](09_Interconnect_QA.md) | Markdown |
+| 📄 | [10_Power_Management_QA.md](10_Power_Management_QA.md) | Markdown |
+| 📄 | [11_SIMD_FP_QA.md](11_SIMD_FP_QA.md) | Markdown |
 
 ---
 
-## Difficulty Levels
+<div align="center">
 
-Each question is tagged:
-- **[L1]** — Fundamental (every ARM engineer should know)
-- **[L2]** — Intermediate (expected at 10+ years)
-- **[L3]** — Advanced (differentiator at 15+ years, architect-level)
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../../README.md)</p>
+
+</div>
 
 ---
 
-Back to [Main Documentation Index](../README.md)
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">Q&A</b></sub>
+</div>

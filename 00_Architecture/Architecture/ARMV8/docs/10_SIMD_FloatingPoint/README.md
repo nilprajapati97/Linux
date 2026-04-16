@@ -1,43 +1,37 @@
-# SIMD & Floating-Point Subsystem
+<div align="center">
 
-ARMv8 includes **Advanced SIMD (NEON)** and **Floating-Point (FP)** as mandatory features in AArch64, plus the scalable vector extensions **SVE** and **SVE2**.
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-```
-SIMD/FP Architecture:
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">📐 SIMD FloatingPoint</h1>
 
-  ┌──────────────────────────────────────────────────────────────┐
-  │  Register File:                                               │
-  │                                                                │
-  │  32 vector registers: V0-V31                                  │
-  │  Each is 128 bits wide (NEON) or up to 2048 bits (SVE)       │
-  │                                                                │
-  │  ┌─────────────────────────────────────────────────────────┐  │
-  │  │                     V0 (128-bit)                         │  │
-  │  │  ┌──────┬──────┬──────┬──────┬──────┬──────┬──────────┐│  │
-  │  │  │ B[15]│ ...  │ B[0] │      │      │      │          ││  │
-  │  │  │ H[7] │ ...  │ H[0] │      │      │      │          ││  │
-  │  │  │ S[3] │      │ S[1] │      │ S[0] │      │          ││  │
-  │  │  │      │ D[1] │      │      │ D[0] │      │          ││  │
-  │  │  │      │      │      │ Q[0] │      │      │          ││  │
-  │  │  └──────┴──────┴──────┴──────┴──────┴──────┴──────────┘│  │
-  │  └─────────────────────────────────────────────────────────┘  │
-  │                                                                │
-  │  Register views:                                               │
-  │    Bn = 8-bit  byte (B0 = V0[7:0])                            │
-  │    Hn = 16-bit half (H0 = V0[15:0])                           │
-  │    Sn = 32-bit single-precision float (S0 = V0[31:0])        │
-  │    Dn = 64-bit double-precision float (D0 = V0[63:0])        │
-  │    Qn = 128-bit full register (Q0 = V0[127:0])               │
-  │    Vn = 128-bit SIMD vector                                   │
-  └──────────────────────────────────────────────────────────────┘
-```
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">NEON SIMD, floating-point extensions</p>
 
-## Documents
+</div>
 
-| # | Topic | File |
-|---|-------|------|
-| 1 | [NEON, SVE & SVE2](./01_NEON_SVE.md) | SIMD instructions, vector processing, scalable vectors |
+</div>
+
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs / 10_SIMD_FloatingPoint`
+
+![Category](https://img.shields.io/badge/Category-SIMD/FP-9370DB?style=flat-square) ![Docs](https://img.shields.io/badge/Docs-1-2E8B57?style=flat-square)
 
 ---
 
-Back to [Main Index](../README.md)
+<h2 style="color: #9370DB;">📄 Files</h2>
+
+| | File | Type |
+|:---:|:---|:---|
+| 📄 | [01_NEON_SVE.md](01_NEON_SVE.md) | Markdown |
+
+---
+
+<div align="center">
+
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../../README.md)</p>
+
+</div>
+
+---
+
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">SIMD/FP</b></sub>
+</div>

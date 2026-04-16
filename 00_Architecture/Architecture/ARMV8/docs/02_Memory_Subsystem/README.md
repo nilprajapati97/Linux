@@ -1,52 +1,41 @@
-# Memory Subsystem — ARMv8-A
+<div align="center">
 
-## Overview
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-The memory subsystem manages how the CPU accesses memory — from virtual address
-translation to physical memory access, including the MMU, TLB, and memory ordering.
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">💾 Memory Subsystem</h1>
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                    Memory Subsystem                               │
-│                                                                    │
-│   CPU Core                                                        │
-│   ┌──────────────────────────┐                                   │
-│   │  Virtual Address (VA)    │                                   │
-│   │  (from load/store insn)  │                                   │
-│   └────────────┬─────────────┘                                   │
-│                │                                                  │
-│   ┌────────────▼─────────────┐                                   │
-│   │         TLB              │  Translation Lookaside Buffer     │
-│   │  (VA → PA cache)         │  Fast lookup of recent translations│
-│   └────┬──────────────┬──────┘                                   │
-│        │ HIT          │ MISS                                     │
-│        │              ▼                                           │
-│        │  ┌───────────────────┐                                  │
-│        │  │  MMU Table Walker │  Walks page tables in memory     │
-│        │  │  (Hardware)       │                                  │
-│        │  └────────┬──────────┘                                  │
-│        │           │                                              │
-│        ▼           ▼                                              │
-│   ┌────────────────────────┐                                     │
-│   │  Physical Address (PA) │                                     │
-│   └────────────┬───────────┘                                     │
-│                │                                                  │
-│   ┌────────────▼───────────┐                                     │
-│   │  Cache Hierarchy       │  L1D → L2 → L3                     │
-│   └────────────┬───────────┘                                     │
-│                │                                                  │
-│   ┌────────────▼───────────┐                                     │
-│   │  Interconnect → DRAM   │                                     │
-│   └────────────────────────┘                                     │
-└──────────────────────────────────────────────────────────────────┘
-```
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">Memory management unit, page tables, TLB</p>
 
-## Documents in This Section
+</div>
 
-| # | Document | Description |
-|---|----------|-------------|
-| 1 | [Memory Model](./01_Memory_Model.md) | ARM memory model, types, attributes |
-| 2 | [Virtual Memory & Address Translation](./02_Virtual_Memory.md) | VA→PA, page tables, granules |
-| 3 | [MMU — Memory Management Unit](./03_MMU.md) | MMU architecture, configuration |
-| 4 | [TLB — Translation Lookaside Buffer](./04_TLB.md) | TLB structure, maintenance |
-| 5 | [Memory Ordering & Barriers](./05_Memory_Ordering.md) | Weak ordering, barriers, acquire/release |
+</div>
+
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs / 02_Memory_Subsystem`
+
+![Category](https://img.shields.io/badge/Category-Memory%20Subsystem-9370DB?style=flat-square) ![Docs](https://img.shields.io/badge/Docs-5-2E8B57?style=flat-square)
+
+---
+
+<h2 style="color: #9370DB;">📄 Files</h2>
+
+| | File | Type |
+|:---:|:---|:---|
+| 📄 | [01_Memory_Model.md](01_Memory_Model.md) | Markdown |
+| 📄 | [02_Virtual_Memory.md](02_Virtual_Memory.md) | Markdown |
+| 📄 | [03_MMU.md](03_MMU.md) | Markdown |
+| 📄 | [04_TLB.md](04_TLB.md) | Markdown |
+| 📄 | [05_Memory_Ordering.md](05_Memory_Ordering.md) | Markdown |
+
+---
+
+<div align="center">
+
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../../README.md)</p>
+
+</div>
+
+---
+
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">Memory Subsystem</b></sub>
+</div>

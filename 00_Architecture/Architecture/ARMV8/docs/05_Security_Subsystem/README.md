@@ -1,54 +1,39 @@
-# Security Subsystem
+<div align="center">
 
-ARMv8 provides hardware-enforced security through **TrustZone**, **Secure Boot**, and **Cryptographic Extensions**.
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-```
-Security Architecture Overview:
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">🛡️ Security Subsystem</h1>
 
-  ┌─────────────────────────────────────────────────────────────────┐
-  │                        ARMv8 SoC                                │
-  │                                                                  │
-  │  ┌─────────────── Secure World ───────────────┐                │
-  │  │                                              │                │
-  │  │  EL3: Secure Monitor (ATF / TF-A)           │                │
-  │  │    • World switch between Secure ↔ Normal   │                │
-  │  │    • SMC call handler                        │                │
-  │  │    • PSCI (CPU on/off/suspend)               │                │
-  │  │                                              │                │
-  │  │  S-EL1: Secure OS (OP-TEE, Trusty)          │                │
-  │  │    • Trusted Applications (TAs)              │                │
-  │  │    • Secure storage, key management          │                │
-  │  │    • DRM, payment processing                 │                │
-  │  │                                              │                │
-  │  │  S-EL0: Secure Applications                  │                │
-  │  │    • Run inside Secure OS                    │                │
-  │  │                                              │                │
-  │  └──────────────────────────────────────────────┘                │
-  │                         ↕ SMC                                    │
-  │  ┌─────────────── Normal World ───────────────┐                │
-  │  │                                              │                │
-  │  │  EL2: Hypervisor (optional)                  │                │
-  │  │  EL1: OS Kernel (Linux, etc.)                │                │
-  │  │  EL0: User Applications                      │                │
-  │  │                                              │                │
-  │  └──────────────────────────────────────────────┘                │
-  │                                                                  │
-  │  ┌─────────────── Bus Fabric ─────────────────┐                │
-  │  │  TZASC (TrustZone Address Space Controller)  │                │
-  │  │  TZPC  (TrustZone Protection Controller)     │                │
-  │  │  TZMA  (TrustZone Memory Adapter)            │                │
-  │  └──────────────────────────────────────────────┘                │
-  └─────────────────────────────────────────────────────────────────┘
-```
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">TrustZone, secure world, EL3</p>
 
-## Documents
+</div>
 
-| # | Topic | File |
-|---|-------|------|
-| 1 | [TrustZone Architecture](./01_TrustZone.md) | Hardware security extension details |
-| 2 | [Secure Boot Chain](./02_Secure_Boot.md) | Boot flow, chain of trust, ATF |
-| 3 | [Cryptographic Extensions](./03_Crypto_Extensions.md) | AES, SHA, CRC instructions |
+</div>
+
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs / 05_Security_Subsystem`
+
+![Category](https://img.shields.io/badge/Category-Security%20Subsystem-9370DB?style=flat-square) ![Docs](https://img.shields.io/badge/Docs-3-2E8B57?style=flat-square)
 
 ---
 
-Back to [Main Index](../README.md)
+<h2 style="color: #9370DB;">📄 Files</h2>
+
+| | File | Type |
+|:---:|:---|:---|
+| 📄 | [01_TrustZone.md](01_TrustZone.md) | Markdown |
+| 📄 | [02_Secure_Boot.md](02_Secure_Boot.md) | Markdown |
+| 📄 | [03_Crypto_Extensions.md](03_Crypto_Extensions.md) | Markdown |
+
+---
+
+<div align="center">
+
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../../README.md)</p>
+
+</div>
+
+---
+
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">Security Subsystem</b></sub>
+</div>

@@ -1,39 +1,39 @@
-# Interrupt Subsystem — ARMv8-A
+<div align="center">
 
-## Overview
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-The interrupt subsystem handles asynchronous events from hardware devices, timers,
-and inter-processor interrupts. ARM uses the **GIC (Generic Interrupt Controller)**
-as the standard interrupt controller architecture.
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">🔔 Interrupt Subsystem</h1>
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                    Interrupt Flow                                    │
-│                                                                      │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐           │
-│  │  UART    │  │  Timer   │  │  GPIO    │  │  PCIe    │  Devices  │
-│  └────┬─────┘  └────┬─────┘  └────┬─────┘  └────┬─────┘           │
-│       │              │              │              │                 │
-│       └──────────────┴──────────────┴──────────────┘                 │
-│                              │                                       │
-│                    ┌─────────▼──────────┐                           │
-│                    │    GIC             │  Generic Interrupt         │
-│                    │  (Distributor +    │  Controller                │
-│                    │   Redistributors + │                            │
-│                    │   CPU Interfaces)  │                            │
-│                    └───┬───────────┬────┘                           │
-│                        │           │                                 │
-│                        ▼           ▼                                 │
-│                   ┌────────┐  ┌────────┐                            │
-│                   │ Core 0 │  │ Core 1 │  IRQ/FIQ signals          │
-│                   └────────┘  └────────┘                            │
-└─────────────────────────────────────────────────────────────────────┘
-```
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">GIC (Generic Interrupt Controller), IRQ handling</p>
 
-## Documents in This Section
+</div>
 
-| # | Document | Description |
-|---|----------|-------------|
-| 1 | [GIC Architecture](./01_GIC_Architecture.md) | GIC versions, components, interrupt flow |
-| 2 | [Exception Handling](./02_Exception_Handling.md) | How interrupts enter the CPU, handler flow |
-| 3 | [Interrupt Types & Routing](./03_Interrupt_Types.md) | SGI, PPI, SPI, LPI, affinity routing |
+</div>
+
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs / 04_Interrupt_Subsystem`
+
+![Category](https://img.shields.io/badge/Category-Interrupt%20Subsystem-9370DB?style=flat-square) ![Docs](https://img.shields.io/badge/Docs-3-2E8B57?style=flat-square)
+
+---
+
+<h2 style="color: #9370DB;">📄 Files</h2>
+
+| | File | Type |
+|:---:|:---|:---|
+| 📄 | [01_GIC_Architecture.md](01_GIC_Architecture.md) | Markdown |
+| 📄 | [02_Exception_Handling.md](02_Exception_Handling.md) | Markdown |
+| 📄 | [03_Interrupt_Types.md](03_Interrupt_Types.md) | Markdown |
+
+---
+
+<div align="center">
+
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../../README.md)</p>
+
+</div>
+
+---
+
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">Interrupt Subsystem</b></sub>
+</div>

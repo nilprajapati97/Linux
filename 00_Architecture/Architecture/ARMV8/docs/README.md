@@ -1,52 +1,48 @@
-# ARMv8 Architecture Documentation
+<div align="center">
 
-## Complete Reference Guide — From Scratch
+<div style="background: linear-gradient(135deg, #9370DB, #1A0A3A); padding: 30px 40px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
 
-This documentation set provides an in-depth, beginner-friendly exploration of the ARMv8 architecture.
-Every subsystem is explained from the ground up, including protocols, mechanisms, and internal workings.
+<h1 style="color: white; margin: 0; font-size: 2.2em; letter-spacing: 1px;">📖 docs</h1>
 
----
+<p style="color: rgba(255,255,255,0.85); margin: 10px 0 0 0; font-size: 1.1em;">ARMv8 subsystem documentation — CPU, memory, cache, interrupts, security</p>
 
-## Table of Contents
+</div>
 
-| #  | Subsystem                        | Directory                          | Description                                                       |
-|----|----------------------------------|------------------------------------|-------------------------------------------------------------------|
-| 00 | ARMv8 Overview                   | [00_ARMv8_Overview](./00_ARMv8_Overview/)           | High-level introduction to ARMv8, history, and key concepts       |
-| 01 | CPU Subsystem                    | [01_CPU_Subsystem](./01_CPU_Subsystem/)             | Execution states, exception levels, registers, pipeline, ISA      |
-| 02 | Memory Subsystem                 | [02_Memory_Subsystem](./02_Memory_Subsystem/)       | Virtual memory, MMU, TLB, memory model, ordering rules            |
-| 03 | Cache Subsystem                  | [03_Cache_Subsystem](./03_Cache_Subsystem/)         | Cache hierarchy, coherency protocols (MESI/MOESI), maintenance    |
-| 04 | Interrupt Subsystem              | [04_Interrupt_Subsystem](./04_Interrupt_Subsystem/) | GIC architecture, exception handling, IRQ/FIQ/SError              |
-| 05 | Security Subsystem               | [05_Security_Subsystem](./05_Security_Subsystem/)   | TrustZone, secure boot, cryptographic extensions                  |
-| 06 | Virtualization Subsystem         | [06_Virtualization_Subsystem](./06_Virtualization_Subsystem/) | Hypervisor support, stage-2 translation, VHE              |
-| 07 | Debug & Trace Subsystem          | [07_Debug_Trace_Subsystem](./07_Debug_Trace_Subsystem/)     | Debug architecture, CoreSight, ETM, breakpoints             |
-| 08 | Interconnect & Bus Subsystem     | [08_Interconnect_Subsystem](./08_Interconnect_Subsystem/)   | AMBA, AXI, ACE, CHI protocols                               |
-| 09 | Power Management                 | [09_Power_Management](./09_Power_Management/)       | DVFS, power states, big.LITTLE, DynamIQ                          |
-| 10 | SIMD & Floating-Point            | [10_SIMD_FloatingPoint](./10_SIMD_FloatingPoint/)   | NEON, SVE/SVE2, floating-point unit                               |
+</div>
+
+📍 `Workspace / Linux / 00_Architecture / Architecture / ARMV8 / docs`
+
+![Category](https://img.shields.io/badge/Category-ARMv8%20Docs-9370DB?style=flat-square) ![Subdirs](https://img.shields.io/badge/Subdirs-12-6A5ACD?style=flat-square)
 
 ---
 
-## How to Use This Documentation
+<h2 style="color: #9370DB;">📂 Subdirectories</h2>
 
-1. **Start with `00_ARMv8_Overview`** to understand the big picture.
-2. **Follow each subsystem** in order (01 → 10) for a structured learning path.
-3. Each subsystem directory has a **README.md** (overview) and numbered topic files for deep dives.
-4. Diagrams are provided in ASCII art for portability.
-
-## Key Terminology
-
-| Term        | Meaning                                                                 |
-|-------------|-------------------------------------------------------------------------|
-| **AArch64** | The 64-bit execution state of ARMv8                                     |
-| **AArch32** | The 32-bit execution state (backward compatible with ARMv7)             |
-| **EL0–EL3** | Exception Levels (privilege levels, 0 = user, 3 = highest)             |
-| **PE**      | Processing Element (a single CPU core)                                  |
-| **ISA**     | Instruction Set Architecture                                            |
-| **AMBA**    | Advanced Microcontroller Bus Architecture                               |
-| **GIC**     | Generic Interrupt Controller                                            |
-| **MMU**     | Memory Management Unit                                                  |
-| **TLB**     | Translation Lookaside Buffer                                            |
-| **SMMU**    | System Memory Management Unit (IOMMU equivalent)                        |
+| | Directory | Description |
+|:---:|:---|:---|
+| 🏛️ | **[ARMv8 Overview](00_ARMv8_Overview/README.md)** | ARMv8 architecture overview — AArch64, exception levels, ISA |
+| 🖥️ | **[CPU Subsystem](01_CPU_Subsystem/README.md)** | CPU execution, registers, instruction set architecture |
+| 💾 | **[Memory Subsystem](02_Memory_Subsystem/README.md)** | Memory management unit, page tables, TLB |
+| ⚡ | **[Cache Subsystem](03_Cache_Subsystem/README.md)** | Cache hierarchy, coherency, maintenance operations |
+| 🔔 | **[Interrupt Subsystem](04_Interrupt_Subsystem/README.md)** | GIC (Generic Interrupt Controller), IRQ handling |
+| 🛡️ | **[Security Subsystem](05_Security_Subsystem/README.md)** | TrustZone, secure world, EL3 |
+| ☁️ | **[Virtualization Subsystem](06_Virtualization_Subsystem/README.md)** | Hypervisor, EL2, stage-2 translation |
+| 🐛 | **[Debug Trace Subsystem](07_Debug_Trace_Subsystem/README.md)** | Debug, trace, CoreSight, breakpoints |
+| 🔀 | **[Interconnect Subsystem](08_Interconnect_Subsystem/README.md)** | AMBA bus, AXI, ACE, CHI protocols |
+| 🔋 | **[Power Management](09_Power_Management/README.md)** | PSCI, CPU hotplug, power states, DVFS |
+| 📐 | **[SIMD FloatingPoint](10_SIMD_FloatingPoint/README.md)** | NEON SIMD, floating-point extensions |
+| ❓ | **[Question Answers](Question_Answers/README.md)** | ARMv8 interview questions and answers |
 
 ---
 
-*This documentation is for educational purposes and covers the ARMv8-A application profile architecture.*
+<div align="center">
+
+<p style="color: #888; font-size: 0.9em;">[⬆️ Parent Directory](../README.md) &nbsp;|&nbsp; [🏠 Workspace Root](../../../../../README.md)</p>
+
+</div>
+
+---
+
+<div align="center">
+<sub style="color: #666;">Auto-generated README — <b style="color: #9370DB;">ARMv8 Docs</b></sub>
+</div>
