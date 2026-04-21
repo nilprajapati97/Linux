@@ -291,7 +291,7 @@ Yes — here’s a clean **Mermaid decision flowchart** for **which kernel memor
 flowchart TD
     A[Need memory in kernel] --> B{Is this for DMA / device access?}
 
-    B -->|Yes| C[Use dma_alloc_coherent<br/>or DMA mapping APIs]
+    B -->|Yes| C[Use dma_alloc_coherent\nor DMA mapping APIs]
     B -->|No| D{Are you in atomic / interrupt context?}
 
     D -->|Yes| E[Use GFP_ATOMIC]
@@ -310,8 +310,8 @@ flowchart TD
     I -->|No| M[kmalloc / kzalloc]
 
     L --> N{Need guaranteed physical contiguity?}
-    N -->|No| O[Prefer kvmalloc<br/>kmalloc first, vmalloc fallback]
-    N -->|Yes| P[Use alloc_pages<br/>or kmalloc if small enough]
+    N -->|No| O[Prefer kvmalloc\nkmalloc first, vmalloc fallback]
+    N -->|Yes| P[Use alloc_pages\nor kmalloc if small enough]
 
     J --> Q[Free with kfree]
     K --> R[Free with __free_pages / free_pages]
@@ -452,24 +452,24 @@ You can paste this directly into any Mermaid-enabled editor.
 ```mermaid
 flowchart TD
 
-    A[Need memory in Linux kernel]:::start --> B{Is memory for<br/>DMA / hardware-visible buffer?}:::decision
+    A[Need memory in Linux kernel]:::start --> B{Is memory for\nDMA / hardware-visible buffer?}:::decision
 
-    B -->|Yes| DMA[dma_alloc_coherent<br/>Use for DMA-safe, device-visible,<br/>consistent/coherent memory]:::dma
-    DMA --> DMAFREE[dma_free_coherent<br/>Matching free API]:::free
+    B -->|Yes| DMA[dma_alloc_coherent\nUse for DMA-safe, device-visible,\nconsistent/coherent memory]:::dma
+    DMA --> DMAFREE[dma_free_coherent\nMatching free API]:::free
 
-    B -->|No| C{Will allocation be tied to<br/>device lifetime automatically?}:::decision
+    B -->|No| C{Will allocation be tied to\ndevice lifetime automatically?}:::decision
 
     C -->|Yes| DEVCHK{Need zeroed memory?}:::decision
-    DEVCHK -->|Yes| DEVKZ[devm_kzalloc<br/>Device-managed + zeroed]:::devm
-    DEVCHK -->|No| DEVKM[devm_kmalloc<br/>Device-managed normal alloc]:::devm
+    DEVCHK -->|Yes| DEVKZ[devm_kzalloc\nDevice-managed + zeroed]:::devm
+    DEVCHK -->|No| DEVKM[devm_kmalloc\nDevice-managed normal alloc]:::devm
 
-    DEVKM --> DEVNOTE[Freed automatically when device is detached / cleanup runs<br/>Usually no manual kfree needed]:::note
+    DEVKM --> DEVNOTE[Freed automatically when device is detached / cleanup runs\nUsually no manual kfree needed]:::note
     DEVKZ --> DEVNOTE
 
     C -->|No| D{Can this allocation sleep?}:::decision
 
-    D -->|Yes| GFPK[GFP_KERNEL<br/>Normal process context<br/>May sleep]:::flag
-    D -->|No| GFPA[GFP_ATOMIC<br/>Interrupt / atomic context<br/>Must not sleep]:::flag
+    D -->|Yes| GFPK[GFP_KERNEL\nNormal process context\nMay sleep]:::flag
+    D -->|No| GFPA[GFP_ATOMIC\nInterrupt / atomic context\nMust not sleep]:::flag
 
     GFPK --> E
     GFPA --> E
@@ -477,30 +477,30 @@ flowchart TD
     E{Need physically contiguous memory?}:::decision
 
     E -->|Yes| F{What kind of allocation?}:::decision
-    E -->|No| V{Is allocation potentially large<br/>or better as virtually contiguous?}:::decision
+    E -->|No| V{Is allocation potentially large\nor better as virtually contiguous?}:::decision
 
     %% Physically contiguous path
     F -->|Small object / buffer / struct| KM0{Need zeroed memory?}:::decision
-    KM0 -->|Yes| KZ["kzalloc(size, gfp)"<br/>Small, fast, physically contiguous,<br/>memory initialized to zero]:::slab
-    KM0 -->|No| KM["kmalloc(size, gfp)"<br/>Small, fast, physically contiguous]:::slab
+    KM0 -->|Yes| KZ["kzalloc(size, gfp)"\nSmall, fast, physically contiguous,\nmemory initialized to zero]:::slab
+    KM0 -->|No| KM["kmalloc(size, gfp)"\nSmall, fast, physically contiguous]:::slab
 
-    KM --> KFREE["kfree(ptr)"<br/>Free kmalloc/kzalloc/krealloc memory]:::free
+    KM --> KFREE["kfree(ptr)"\nFree kmalloc/kzalloc/krealloc memory]:::free
     KZ --> KFREE
 
-    F -->|Resize existing kmalloc buffer| KR[krealloc(ptr, new_size, gfp)<br/>Grow/shrink allocation<br/>May move memory]:::slab
-    KR --> KRNOTE[Common with kmalloc-family memory<br/>If resized successfully, keep returned pointer]:::note
+    F -->|Resize existing kmalloc buffer| KR[krealloc(ptr, new_size, gfp)\nGrow/shrink allocation\nMay move memory]:::slab
+    KR --> KRNOTE[Common with kmalloc-family memory\nIf resized successfully, keep returned pointer]:::note
     KR --> KFREE
 
     F -->|Need raw pages / page-level control| PG{Need struct page or direct virtual address?}:::decision
 
-    PG -->|struct page *| AP["alloc_pages(gfp, order)"<br/>Allocates 2^order physically contiguous pages]:::page
-    AP --> APFREE[__free_pages(page, order)<br/>Matching free API]:::free
+    PG -->|struct page *| AP["alloc_pages(gfp, order)"\nAllocates 2^order physically contiguous pages]:::page
+    AP --> APFREE[__free_pages(page, order)\nMatching free API]:::free
 
-    PG -->|virtual address directly| GFPAGES["__get_free_pages(gfp, order)"<br/>Returns virtual address of contiguous pages]:::page
-    GFPAGES --> GFPAGESFREE[free_pages(addr, order)<br/>Matching free API]:::free
+    PG -->|virtual address directly| GFPAGES["__get_free_pages(gfp, order)"\nReturns virtual address of contiguous pages]:::page
+    GFPAGES --> GFPAGESFREE[free_pages(addr, order)\nMatching free API]:::free
 
     %% Virtually contiguous path
-    V -->|Yes| KVQ{Want one API that tries kmalloc first<br/>and falls back to vmalloc?}:::decision
+    V -->|Yes| KVQ{Want one API that tries kmalloc first\nand falls back to vmalloc?}:::decision
     V -->|No| SMALLCHK{Still small enough for slab allocation?}:::decision
 
     SMALLCHK -->|Yes| KM1{Need zeroed memory?}:::decision
@@ -512,40 +512,40 @@ flowchart TD
     SMALLCHK -->|No| KVQ
 
     KVQ -->|Yes| KVZ{Need zeroed memory?}:::decision
-    KVZ -->|Yes| KVZALLOC[kvzalloc(size, gfp)<br/>Tries kmalloc first,<br/>falls back to vmalloc,<br/>returns zeroed memory]:::hybrid
-    KVZ -->|No| KVMALLOC[kvmalloc(size, gfp)<br/>Tries kmalloc first,<br/>falls back to vmalloc]:::hybrid
+    KVZ -->|Yes| KVZALLOC[kvzalloc(size, gfp)\nTries kmalloc first,\nfalls back to vmalloc,\nreturns zeroed memory]:::hybrid
+    KVZ -->|No| KVMALLOC[kvmalloc(size, gfp)\nTries kmalloc first,\nfalls back to vmalloc]:::hybrid
 
-    KVMALLOC --> KVFREE[kvfree(ptr)<br/>Use for kvmalloc/kvzalloc memory<br/>Handles kmalloc or vmalloc backing]:::free
+    KVMALLOC --> KVFREE[kvfree(ptr)\nUse for kvmalloc/kvzalloc memory\nHandles kmalloc or vmalloc backing]:::free
     KVZALLOC --> KVFREE
 
     KVQ -->|No, directly want vmalloc family| VMZ{Need zeroed memory?}:::decision
-    VMZ -->|Yes| VZ[vzalloc(size)<br/>Virtually contiguous,<br/>zeroed memory,<br/>not physically contiguous]:::vm
-    VMZ -->|No| VM[vmalloc(size)<br/>Virtually contiguous,<br/>not physically contiguous]:::vm
+    VMZ -->|Yes| VZ[vzalloc(size)\nVirtually contiguous,\nzeroed memory,\nnot physically contiguous]:::vm
+    VMZ -->|No| VM[vmalloc(size)\nVirtually contiguous,\nnot physically contiguous]:::vm
 
-    VM --> VFREE[vfree(ptr)<br/>Matching free API for vmalloc/vzalloc]:::free
+    VM --> VFREE[vfree(ptr)\nMatching free API for vmalloc/vzalloc]:::free
     VZ --> VFREE
 
     %% Warnings / guidance
-    KM --> WARN1[Good for small allocations,<br/>fast path, slab allocator]:::good
+    KM --> WARN1[Good for small allocations,\nfast path, slab allocator]:::good
     KZ --> WARN1
-    KR --> WARN2[krealloc is for resizing existing heap-style kernel buffers,<br/>not for vmalloc buffers]:::warn
+    KR --> WARN2[krealloc is for resizing existing heap-style kernel buffers,\nnot for vmalloc buffers]:::warn
 
-    KVMALLOC --> GOODKV[Best when size may grow large and<br/>physical contiguity is not required]:::good
+    KVMALLOC --> GOODKV[Best when size may grow large and\nphysical contiguity is not required]:::good
     KVZALLOC --> GOODKV
 
-    VM --> WARNVM[vmalloc/vzalloc are slower than kmalloc:<br/>extra page-table setup, TLB costs]:::warn
+    VM --> WARNVM[vmalloc/vzalloc are slower than kmalloc:\nextra page-table setup, TLB costs]:::warn
     VZ --> WARNVM
 
-    AP --> WARNPG[Use when you need low-level page control,<br/>higher-order contiguous pages,<br/>or struct page handling]:::good
+    AP --> WARNPG[Use when you need low-level page control,\nhigher-order contiguous pages,\nor struct page handling]:::good
     GFPAGES --> WARNPG
 
-    DMA --> WARNDMA[Use only for DMA/device coherent memory needs,<br/>not as a generic replacement for kmalloc]:::warn
+    DMA --> WARNDMA[Use only for DMA/device coherent memory needs,\nnot as a generic replacement for kmalloc]:::warn
 
-    DEVKM --> DEVWARN[devm_* is convenient for driver probe/remove lifecycle,<br/>but not for every generic kernel subsystem path]:::good
+    DEVKM --> DEVWARN[devm_* is convenient for driver probe/remove lifecycle,\nbut not for every generic kernel subsystem path]:::good
     DEVKZ --> DEVWARN
 
     %% Final decision reminders
-    REM1[Rule of thumb:<br/>small + fast + contiguous -> kmalloc/kzalloc<br/>resizing -> krealloc<br/>large and not physically contiguous -> kvmalloc/kvzalloc or vmalloc/vzalloc<br/>page-level control -> alloc_pages / __get_free_pages<br/>device-managed driver memory -> devm_kmalloc/devm_kzalloc<br/>DMA -> dma_alloc_coherent]:::summary
+    REM1[Rule of thumb:\nsmall + fast + contiguous -> kmalloc/kzalloc\nresizing -> krealloc\nlarge and not physically contiguous -> kvmalloc/kvzalloc or vmalloc/vzalloc\npage-level control -> alloc_pages / __get_free_pages\ndevice-managed driver memory -> devm_kmalloc/devm_kzalloc\nDMA -> dma_alloc_coherent]:::summary
 
     KFREE --> REM1
     KVFREE --> REM1
@@ -629,5 +629,4 @@ I can also turn this into a **one-page interview cheat sheet** with:
 * sleep allowed or not
 * free function
 * common mistakes
-
 
