@@ -1,12 +1,8 @@
-Here’s a **complete Markdown document** (ready for GitHub / Notion / Confluence) with structured sections and embedded **Mermaid flowcharts**.
+# Linux Kernel Memory Allocation API Selection Guide
 
 ---
 
-# 🧾 Linux Kernel Memory Allocation: API Selection Guide and Decision Flow
-
----
-
-## 📌 Overview
+## Overview
 
 Memory allocation in the Linux kernel is **not one-size-fits-all**.
 Different APIs exist because of constraints like:
@@ -26,9 +22,9 @@ This guide explains:
 
 ---
 
-## 🧠 Core Concepts
+## Core Concepts
 
-### 🔹 Physical vs Virtual Memory
+### Physical vs Virtual Memory
 
 | Type     | Description                                      |
 | -------- | ------------------------------------------------ |
@@ -37,7 +33,7 @@ This guide explains:
 
 ---
 
-### 🔹 Allocation Constraints
+### Allocation Constraints
 
 | Constraint  | Impact                             |
 | ----------- | ---------------------------------- |
@@ -48,7 +44,7 @@ This guide explains:
 
 ---
 
-## ⚙️ GFP Flags (Allocation Context)
+## GFP Flags
 
 | Flag         | Use Case                   |
 | ------------ | -------------------------- |
@@ -58,7 +54,7 @@ This guide explains:
 
 ---
 
-## 🧩 Allocation APIs Summary
+## Allocation API Summary
 
 | API                  | Use Case           | Contiguity | Free API            |
 | -------------------- | ------------------ | ---------- | ------------------- |
@@ -76,126 +72,126 @@ This guide explains:
 
 ---
 
-## 🚀 Primary Decision Flow
+## Primary Decision Flow
 
 ```mermaid
 flowchart TD
-    A[Need kernel memory] --> B{Is this for DMA/device?}
+    A["Need kernel memory"] --> B{"Is this for DMA/device?"}
 
-    B -->|Yes| C[dma_alloc_coherent]
-    C --> C1[dma_free_coherent]
+    B -->|Yes| C["dma_alloc_coherent"]
+    C --> C1["dma_free_coherent"]
 
-    B -->|No| D{Device-managed lifecycle?}
+    B -->|No| D{"Device-managed lifecycle?"}
 
-    D -->|Yes| E{Zeroed?}
-    E -->|Yes| F[devm_kzalloc]
-    E -->|No| G[devm_kmalloc]
+    D -->|Yes| E{"Zeroed?"}
+    E -->|Yes| F["devm_kzalloc"]
+    E -->|No| G["devm_kmalloc"]
 
-    D -->|No| H{Can sleep?}
+    D -->|No| H{"Can sleep?"}
 
-    H -->|Yes| I[GFP_KERNEL]
-    H -->|No| J[GFP_ATOMIC]
+    H -->|Yes| I["GFP_KERNEL"]
+    H -->|No| J["GFP_ATOMIC"]
 
-    I --> K
+    I --> K{"Need physical contiguity?"}
     J --> K
 
-    K{Need physical contiguity?}
+    K -->|Yes| L{"Small or pages?"}
+    K -->|No| M{"Large allocation?"}
 
-    K -->|Yes| L{Small or pages?}
-    K -->|No| M{Large allocation?}
+    L -->|Small| N["kmalloc / kzalloc"]
+    L -->|Pages| O["alloc_pages / __get_free_pages"]
 
-    L -->|Small| N[kmalloc / kzalloc]
-    L -->|Pages| O[alloc_pages / __get_free_pages]
-
-    M -->|Yes| P[kvmalloc / kvzalloc]
+    M -->|Yes| P["kvmalloc / kvzalloc"]
     M -->|No| N
 
-    P --> Q[kvfree]
-    N --> R[kfree]
-    O --> S[free_pages / __free_pages]
+    P --> Q["kvfree"]
+    N --> R["kfree"]
+    O --> S["free_pages / __free_pages"]
 ```
 
 ---
 
-## 🧭 Detailed Allocation Flow
+## Detailed Allocation Flow
 
 ```mermaid
 flowchart TD
 
-    A[Start Allocation] --> B{DMA Required?}
+    A["Start allocation"] --> B{"DMA required?"}
 
-    B -->|Yes| DMA[dma_alloc_coherent]
-    DMA --> DMAFREE[dma_free_coherent]
+    B -->|Yes| DMA["dma_alloc_coherent"]
+    DMA --> DMAFREE["dma_free_coherent"]
 
-    B -->|No| C{Device Managed?}
+    B -->|No| C{"Device managed?"}
 
-    C -->|Yes| DEV{Zeroed?}
-    DEV -->|Yes| DEVZ[devm_kzalloc]
-    DEV -->|No| DEVN[devm_kmalloc]
+    C -->|Yes| DEV{"Zeroed?"}
+    DEV -->|Yes| DEVZ["devm_kzalloc"]
+    DEV -->|No| DEVN["devm_kmalloc"]
 
-    C -->|No| D{Context allows sleep?}
+    C -->|No| D{"Context allows sleep?"}
 
-    D -->|Yes| G1[GFP_KERNEL]
-    D -->|No| G2[GFP_ATOMIC]
+    D -->|Yes| G1["GFP_KERNEL"]
+    D -->|No| G2["GFP_ATOMIC"]
 
-    G1 --> E
+    G1 --> E{"Need physical contiguity?"}
     G2 --> E
 
-    E{Need physical contiguity?}
+    E -->|Yes| F{"Type of allocation"}
+    E -->|No| V{"Large allocation?"}
 
-    E -->|Yes| F{Type of allocation}
-    E -->|No| V{Large allocation?}
+    F -->|Small| KM["kmalloc"]
+    F -->|Zeroed| KZ["kzalloc"]
+    F -->|Resize| KR["krealloc"]
 
-    F -->|Small| KM[kmalloc]
-    F -->|Zeroed| KZ[kzalloc]
-    F -->|Resize| KR[krealloc]
-
-    KM --> KFREE[kfree]
+    KM --> KFREE["kfree"]
     KZ --> KFREE
     KR --> KFREE
 
-    F -->|Pages| PG{Page API}
-    PG --> AP[alloc_pages]
-    PG --> GFP[__get_free_pages]
+    F -->|Pages| PG{"Page API"}
+    PG --> AP["alloc_pages"]
+    PG --> GFP["__get_free_pages"]
 
-    AP --> APF[__free_pages]
-    GFP --> GPF[free_pages]
+    AP --> APF["__free_pages"]
+    GFP --> GPF["free_pages"]
 
-    V -->|Yes| KV{Zeroed?}
+    V -->|Yes| KV{"Prefer kvmalloc family?"}
     V -->|No| KM
 
-    KV -->|Yes| KVZ[kvzalloc]
-    KV -->|No| KVM[kvmalloc]
+    KV -->|Yes| KVZ{"Zeroed?"}
+    KV -->|No| VM{"Use vmalloc family directly?"}
 
-    KVZ --> KVF[kvfree]
-    KVM --> KVF
+    KVZ -->|Yes| KVZALLOC["kvzalloc"]
+    KVZ -->|No| KVM["kvmalloc"]
 
-    V -->|Direct vmalloc| VM{Zeroed?}
-    VM -->|Yes| VZ[vzalloc]
-    VM -->|No| VMN[vmalloc]
+    KVM --> KVF["kvfree"]
+    KVZALLOC --> KVF
 
-    VZ --> VF[vfree]
+    VM -->|Yes| VMZ{"Zeroed?"}
+    VM -->|No| KVM
+    VMZ -->|Yes| VZ["vzalloc"]
+    VMZ -->|No| VMN["vmalloc"]
+
+    VZ --> VF["vfree"]
     VMN --> VF
 ```
 
 ---
 
-## 🧪 Matching Free APIs (Important)
+## Matching Free APIs
 
 ```mermaid
 flowchart LR
-    A[kmalloc / kzalloc / krealloc] --> B[kfree]
-    C[kvmalloc / kvzalloc] --> D[kvfree]
-    E[vmalloc / vzalloc] --> F[vfree]
-    G[alloc_pages] --> H[__free_pages]
-    I[__get_free_pages] --> J[free_pages]
-    K[dma_alloc_coherent] --> L[dma_free_coherent]
-    M[devm_kmalloc] --> N[auto cleanup]
+    A["kmalloc / kzalloc / krealloc"] --> B["kfree"]
+    C["kvmalloc / kvzalloc"] --> D["kvfree"]
+    E["vmalloc / vzalloc"] --> F["vfree"]
+    G["alloc_pages"] --> H["__free_pages"]
+    I["__get_free_pages"] --> J["free_pages"]
+    K["dma_alloc_coherent"] --> L["dma_free_coherent"]
+    M["devm_kmalloc"] --> N["auto cleanup"]
 ```
 
 ---
 
-## ⚠️ Common Mistakes
+## Common Mistakes
 
 * ❌ Using `vmalloc` when physical contiguity is required
 * ❌ Using `kfree` on `vmalloc` memory
@@ -205,7 +201,7 @@ flowchart LR
 
 ---
 
-## 🧠 Rules of Thumb
+## Rules of Thumb
 
 ```text
 Small + fast + contiguous      → kmalloc / kzalloc
@@ -219,26 +215,17 @@ Hardware DMA                   → dma_alloc_coherent
 
 ---
 
-## 🏁 Conclusion
+## Conclusion
 
 There is no single “best” allocation API in the Linux kernel.
 
-Each exists to solve a **specific constraint combination**:
+Each exists to solve a specific constraint combination:
 
-* Performance → `kmalloc`
-* Size → `vmalloc`
-* Flexibility → `kvmalloc`
-* Control → `alloc_pages`
-* Hardware → `dma_alloc_coherent`
-* Lifecycle → `devm_*`
+- Performance -> `kmalloc`
+- Size -> `vmalloc`
+- Flexibility -> `kvmalloc`
+- Control -> `alloc_pages`
+- Hardware -> `dma_alloc_coherent`
+- Lifecycle -> `devm_*`
 
-👉 Choosing the right API is about understanding **requirements, not just syntax**.
-
----
-
-If you want next step, I can extend this into:
-
-* 🔍 slab allocator internals (SLUB vs SLAB)
-* 🧠 memory fragmentation behavior
-* 🐞 debugging kernel memory leaks (kmemleak, slabinfo)
-* ⚡ real driver examples using each API
+Choosing the right API is about understanding requirements, not just syntax.
