@@ -481,10 +481,10 @@ flowchart TD
 
     %% Physically contiguous path
     F -->|Small object / buffer / struct| KM0{Need zeroed memory?}:::decision
-    KM0 -->|Yes| KZ[kzalloc(size, gfp)<br/>Small, fast, physically contiguous,<br/>memory initialized to zero]:::slab
-    KM0 -->|No| KM[kmalloc(size, gfp)<br/>Small, fast, physically contiguous]:::slab
+    KM0 -->|Yes| KZ["kzalloc(size, gfp)"<br/>Small, fast, physically contiguous,<br/>memory initialized to zero]:::slab
+    KM0 -->|No| KM["kmalloc(size, gfp)"<br/>Small, fast, physically contiguous]:::slab
 
-    KM --> KFREE[kfree(ptr)<br/>Free kmalloc/kzalloc/krealloc memory]:::free
+    KM --> KFREE["kfree(ptr)"<br/>Free kmalloc/kzalloc/krealloc memory]:::free
     KZ --> KFREE
 
     F -->|Resize existing kmalloc buffer| KR[krealloc(ptr, new_size, gfp)<br/>Grow/shrink allocation<br/>May move memory]:::slab
@@ -493,10 +493,10 @@ flowchart TD
 
     F -->|Need raw pages / page-level control| PG{Need struct page or direct virtual address?}:::decision
 
-    PG -->|struct page *| AP[alloc_pages(gfp, order)<br/>Allocates 2^order physically contiguous pages]:::page
+    PG -->|struct page *| AP["alloc_pages(gfp, order)"<br/>Allocates 2^order physically contiguous pages]:::page
     AP --> APFREE[__free_pages(page, order)<br/>Matching free API]:::free
 
-    PG -->|virtual address directly| GFPAGES[__get_free_pages(gfp, order)<br/>Returns virtual address of contiguous pages]:::page
+    PG -->|virtual address directly| GFPAGES["__get_free_pages(gfp, order)"<br/>Returns virtual address of contiguous pages]:::page
     GFPAGES --> GFPAGESFREE[free_pages(addr, order)<br/>Matching free API]:::free
 
     %% Virtually contiguous path
@@ -504,8 +504,8 @@ flowchart TD
     V -->|No| SMALLCHK{Still small enough for slab allocation?}:::decision
 
     SMALLCHK -->|Yes| KM1{Need zeroed memory?}:::decision
-    KM1 -->|Yes| KZ2[kzalloc(size, gfp)]:::slab
-    KM1 -->|No| KM2[kmalloc(size, gfp)]:::slab
+    KM1 -->|Yes| KZ2["kzalloc(size, gfp)"]:::slab
+    KM1 -->|No| KM2["kmalloc(size, gfp)"]:::slab
     KM2 --> KFREE
     KZ2 --> KFREE
 
