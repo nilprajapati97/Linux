@@ -34,13 +34,13 @@ The target audience is a beginner. The documents start with fundamentals and the
 
 ## Main kernel files used in this repo
 
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/mm/proc.S`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/kernel/head.S`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/include/asm/assembler.h`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/include/asm/sysreg.h`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/include/asm/memory.h`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/include/asm/kernel-pgtable.h`
-- `C:/My_Projects/Kernel_Repo/linux/arch/arm64/include/asm/pgtable-prot.h`
+- `/linux/arch/arm64/mm/proc.S`
+- `/linux/arch/arm64/kernel/head.S`
+- `/linux/arch/arm64/include/asm/assembler.h`
+- `linux/arch/arm64/include/asm/sysreg.h`
+- `/linux/arch/arm64/include/asm/memory.h`
+- `/linux/arch/arm64/include/asm/kernel-pgtable.h`
+- `/linux/arch/arm64/include/asm/pgtable-prot.h`
 
 ## Core idea to keep in mind
 
